@@ -7,6 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Mis Hábitos">
 <title>Mis Hábitos 🌸</title>
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj4KICA8cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgcng9IjIyIiBmaWxsPSIjYzA2MDkwIi8+CiAgPGVsbGlwc2UgY3g9IjUwIiBjeT0iMjgiIHJ4PSI4IiByeT0iMTQiIGZpbGw9IiNmNGEwYzgiIG9wYWNpdHk9IjAuOSIvPgogIDxlbGxpcHNlIGN4PSI1MCIgY3k9IjcyIiByeD0iOCIgcnk9IjE0IiBmaWxsPSIjZjRhMGM4IiBvcGFjaXR5PSIwLjkiLz4KICA8ZWxsaXBzZSBjeD0iMjgiIGN5PSI1MCIgcng9IjE0IiByeT0iOCIgZmlsbD0iI2Y0YTBjOCIgb3BhY2l0eT0iMC45Ii8+CiAgPGVsbGlwc2UgY3g9IjcyIiBjeT0iNTAiIHJ4PSIxNCIgcnk9IjgiIGZpbGw9IiNmNGEwYzgiIG9wYWNpdHk9IjAuOSIvPgogIDxlbGxpcHNlIGN4PSIzMyIgY3k9IjMzIiByeD0iOCIgcnk9IjE0IiBmaWxsPSIjZjRhMGM4IiBvcGFjaXR5PSIwLjg1IiB0cmFuc2Zvcm09InJvdGF0ZSg0NSAzMyAzMykiLz4KICA8ZWxsaXBzZSBjeD0iNjciIGN5PSIzMyIgcng9IjgiIHJ5PSIxNCIgZmlsbD0iI2Y0YTBjOCIgb3BhY2l0eT0iMC44NSIgdHJhbnNmb3JtPSJyb3RhdGUoLTQ1IDY3IDMzKSIvPgogIDxlbGxpcHNlIGN4PSIzMyIgY3k9IjY3IiByeD0iOCIgcnk9IjE0IiBmaWxsPSIjZjRhMGM4IiBvcGFjaXR5PSIwLjg1IiB0cmFuc2Zvcm09InJvdGF0ZSgtNDUgMzMgNjcpIi8+CiAgPGVsbGlwc2UgY3g9IjY3IiBjeT0iNjciIHJ4PSI4IiByeT0iMTQiIGZpbGw9IiNmNGEwYzgiIG9wYWNpdHk9IjAuODUiIHRyYW5zZm9ybT0icm90YXRlKDQ1IDY3IDY3KSIvPgogIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjE0IiBmaWxsPSIjZmZmMGY2Ii8+CiAgPGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iOSIgZmlsbD0iI2Y4YzBkOCIvPgogIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjUiIGZpbGw9IiNjMDYwOTAiLz4KPC9zdmc+">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
   :root {
@@ -97,6 +98,24 @@
   .stress-btn.sel { background: var(--pink); border-color: var(--pink); color: white; }
   .stress-word { font-size: 11px; color: var(--text3); margin-left: 2px; }
 
+  /* Traffic light meals */
+  .meal-row { display: flex; align-items: center; padding: 10px 14px; border-bottom: 1px solid var(--border); gap: 8px; }
+  .meal-row:last-child { border-bottom: none; }
+  .meal-name { font-size: 13px; color: var(--text); flex: 1; line-height: 1.3; }
+  .meal-emoji { font-size: 16px; width: 24px; flex-shrink: 0; }
+  .meal-cells { display: flex; gap: 5px; flex-shrink: 0; }
+  .meal-cell { width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid var(--border); background: var(--surface1); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 13px; transition: all 0.12s; user-select: none; flex-shrink: 0; }
+  .meal-cell.red    { background: #f4cdd6; border-color: var(--red); }
+  .meal-cell.yellow { background: #fbe6c4; border-color: var(--amber); }
+  .meal-cell.green  { background: #c9eed9; border-color: var(--green); }
+  @media (prefers-color-scheme: dark) {
+    .meal-cell.red    { background: #4a2028; }
+    .meal-cell.yellow { background: #4a3a18; }
+    .meal-cell.green  { background: #1a3328; }
+  }
+  .legend-row { display: flex; gap: 14px; padding: 0 14px 12px; font-size: 11px; color: var(--text3); flex-wrap: wrap; }
+  .legend-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: middle; }
+
   /* Metrics */
   .metric-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0 12px 12px; }
   .metric { background: var(--surface); border-radius: var(--radius); padding: 14px 12px; text-align: center; }
@@ -115,6 +134,12 @@
   .hbar-track { flex: 1; height: 9px; background: var(--surface1); border-radius: 5px; overflow: hidden; }
   .hbar-fill { height: 100%; border-radius: 5px; transition: width 0.4s; }
   .hbar-pct { font-size: 11px; color: var(--text3); width: 30px; text-align: right; flex-shrink: 0; }
+
+  /* Meal breakdown */
+  .meal-bd-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .meal-bd-lbl { font-size: 12px; color: var(--text2); width: 70px; flex-shrink: 0; }
+  .meal-bd-track { flex: 1; height: 14px; border-radius: 7px; overflow: hidden; display: flex; background: var(--surface1); }
+  .meal-bd-seg { height: 100%; }
 
   /* Insight cards */
   .insight-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin: 0 12px 12px; }
@@ -182,6 +207,14 @@
     <div class="habits-block" id="habits-dia"></div>
     <div class="section-label">🌙 Noche</div>
     <div class="habits-block" id="habits-noche"></div>
+    <div class="section-label">🚦 Calidad de comidas</div>
+    <div class="habits-block" id="meals-rows"></div>
+    <div class="legend-row">
+      <span><span class="legend-dot" style="background:var(--red);"></span>Comida basura</span>
+      <span><span class="legend-dot" style="background:var(--amber);"></span>Más o menos</span>
+      <span><span class="legend-dot" style="background:var(--green);"></span>Saludable</span>
+    </div>
+
     <div class="section-label">💧 Agua (vasos de 20 oz)</div>
     <div class="card"><div id="water-rows"></div></div>
     <div class="section-label">😌 Nivel de estrés</div>
@@ -216,6 +249,13 @@
       <div class="card-title">🧠 Nivel de estrés (0=bajo, 3=alto)</div>
       <div class="chart-wrap" style="height:160px;"><canvas id="stress-chart" role="img" aria-label="Nivel de estrés por día"></canvas></div>
       <div class="chart-note" id="stress-note"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">🚦 Calidad de comidas</div>
+      <div class="chart-wrap" style="height:170px;"><canvas id="meals-chart" role="img" aria-label="Calidad de comidas por día"></canvas></div>
+      <div class="chart-note" id="meals-note"></div>
+      <div style="height:10px;"></div>
+      <div id="meals-breakdown"></div>
     </div>
     <div class="insight-grid" id="insight-cards"></div>
   </div>
@@ -260,6 +300,11 @@ const HABITS = {
   ]
 };
 const ALL_HABITS = [...HABITS.manana, ...HABITS.dia, ...HABITS.noche];
+const MEALS = [
+  { id:'meal_desayuno', emoji:'🍳', name:'Desayuno' },
+  { id:'meal_almuerzo', emoji:'🍲', name:'Almuerzo' },
+  { id:'meal_cena',     emoji:'🌙', name:'Cena' },
+];
 
 let currentMonday = getMondayOf(new Date());
 let state = {};
@@ -281,11 +326,16 @@ function loadWeek(m) {
   const key = storageKey(m);
   const saved = localStorage.getItem(key);
   state = saved ? JSON.parse(saved) : initState();
+  if(!state.meals) {
+    state.meals = {};
+    MEALS.forEach(mm => { state.meals[mm.id] = Array(7).fill(null); });
+  }
   render();
 }
 function initState() {
-  const s = { habits:{}, water:{}, stress:{} };
+  const s = { habits:{}, water:{}, stress:{}, meals:{} };
   ALL_HABITS.forEach(h => { s.habits[h.id] = Array(7).fill(null); });
+  MEALS.forEach(m => { s.meals[m.id] = Array(7).fill(null); });
   for(let i=0;i<7;i++) { s.water[i]=0; s.stress[i]=null; }
   return s;
 }
@@ -323,6 +373,13 @@ function togglePrayer(di) {
   state.habits['oracion'][di] = cur===null?true:cur===true?false:null;
   renderHabits(); autoSave();
 }
+function toggleMeal(mealId, di) {
+  const order = [null, 'red', 'yellow', 'green'];
+  const cur = state.meals[mealId][di];
+  const idx = order.indexOf(cur);
+  state.meals[mealId][di] = order[(idx+1) % order.length];
+  renderMeals(); autoSave();
+}
 
 function renderDayHeaders() {
   const c=document.getElementById('day-headers'); c.innerHTML='';
@@ -357,6 +414,25 @@ function renderHabits() {
   renderHabitSection('habits-manana',HABITS.manana);
   renderHabitSection('habits-dia',HABITS.dia);
   renderHabitSection('habits-noche',HABITS.noche);
+}
+function renderMeals() {
+  const c=document.getElementById('meals-rows'); if(!c) return; c.innerHTML='';
+  MEALS.forEach(m=>{
+    const row=document.createElement('div'); row.className='meal-row';
+    const em=document.createElement('div'); em.className='meal-emoji'; em.textContent=m.emoji;
+    const nm=document.createElement('div'); nm.className='meal-name'; nm.textContent=m.name;
+    const cells=document.createElement('div'); cells.className='meal-cells';
+    for(let i=0;i<7;i++){
+      const val=(state.meals[m.id]||[])[i]??null;
+      const cell=document.createElement('div');
+      cell.className='meal-cell'+(val?' '+val:'');
+      cell.textContent=val==='red'?'🔴':val==='yellow'?'🟡':val==='green'?'🟢':'';
+      const di=i, mi=m.id;
+      cell.onclick=()=>toggleMeal(mi,di);
+      cells.appendChild(cell);
+    }
+    row.appendChild(em); row.appendChild(nm); row.appendChild(cells); c.appendChild(row);
+  });
 }
 function renderWater() {
   const c=document.getElementById('water-rows'); if(!c) return; c.innerHTML='';
@@ -395,7 +471,7 @@ function render() {
   document.getElementById('week-subtitle').textContent=`Semana del ${range}`;
   document.getElementById('week-title-reg').textContent=range;
   document.getElementById('week-title-graf').textContent=range;
-  renderDayHeaders(); renderHabits(); renderWater(); renderStress();
+  renderDayHeaders(); renderHabits(); renderMeals(); renderWater(); renderStress();
 }
 
 function calcDayPct(di) {
@@ -418,11 +494,16 @@ function renderCharts() {
   const waterVals=DAYS.map((_,i)=>(state.water[i]||0)*WATER_OZ);
   const waterAvg=Math.round(waterVals.reduce((a,b)=>a+b,0)/7);
 
+  let greenMeals=0, totalMeals=0;
+  MEALS.forEach(m=>{ (state.meals[m.id]||[]).forEach(v=>{ if(v){ totalMeals++; if(v==='green') greenMeals++; } }); });
+  const mealQualityPct = totalMeals>0 ? Math.round(greenMeals/totalMeals*100) : 0;
+
   document.getElementById('metric-cards').innerHTML=`
     <div class="metric"><div class="metric-val">${avg}%</div><div class="metric-lbl">Promedio semanal</div></div>
     <div class="metric"><div class="metric-val">${best}%</div><div class="metric-lbl">Mejor día</div></div>
     <div class="metric"><div class="metric-val">${prayerDone}/7</div><div class="metric-lbl">Días de oración</div></div>
     <div class="metric"><div class="metric-val">${waterAvg}oz</div><div class="metric-lbl">Agua promedio/día</div></div>
+    <div class="metric"><div class="metric-val">${mealQualityPct}%</div><div class="metric-lbl">🟢 Comidas saludables</div></div>
   `;
 
   const db=document.getElementById('daily-bars'); db.innerHTML='';
@@ -492,6 +573,63 @@ function renderCharts() {
     const first=filled[0],last=filled[filled.length-1];
     document.getElementById('stress-note').textContent=first>last?`¡Tu estrés bajó de ${first} a ${last} esta semana! 🌸`:first<last?`Tu estrés subió de ${first} a ${last} esta semana.`:`Tu estrés se mantuvo estable en ${first}.`;
   } else { document.getElementById('stress-note').textContent=''; }
+
+  // Meals stacked chart
+  const redByDay=[], yellowByDay=[], greenByDay=[];
+  for(let i=0;i<7;i++){
+    let r=0,y=0,g=0;
+    MEALS.forEach(m=>{
+      const v=(state.meals[m.id]||[])[i];
+      if(v==='red') r++; else if(v==='yellow') y++; else if(v==='green') g++;
+    });
+    redByDay.push(r); yellowByDay.push(y); greenByDay.push(g);
+  }
+  if(window._mealsChart){ window._mealsChart.destroy(); window._mealsChart=null; }
+  const mCtx=document.getElementById('meals-chart').getContext('2d');
+  window._mealsChart=new Chart(mCtx,{
+    type:'bar',
+    data:{
+      labels:DAYS.map((d,i)=>{ const dt=new Date(currentMonday); dt.setDate(dt.getDate()+i); return `${d} ${dt.getDate()}`; }),
+      datasets:[
+        { label:'Saludable', data:greenByDay, backgroundColor:'#3cb37a', stack:'s' },
+        { label:'Más o menos', data:yellowByDay, backgroundColor:'#e8a020', stack:'s' },
+        { label:'Comida basura', data:redByDay, backgroundColor:'#e05070', stack:'s' },
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{ legend:{display:true,position:'bottom',labels:{boxWidth:10,font:{size:10},color:'#b09aaa'}}, tooltip:{} },
+      scales:{
+        x:{ stacked:true, grid:{display:false}, ticks:{color:'#b09aaa',font:{size:10}} },
+        y:{ stacked:true, min:0, max:3, stepSize:1, grid:{color:'rgba(192,96,144,0.08)'}, ticks:{color:'#b09aaa',font:{size:10},stepSize:1} }
+      }
+    }
+  });
+
+  let totalGreen=0, totalYellow=0, totalRed=0;
+  redByDay.forEach(v=>totalRed+=v); yellowByDay.forEach(v=>totalYellow+=v); greenByDay.forEach(v=>totalGreen+=v);
+  const totalRated = totalGreen+totalYellow+totalRed;
+  document.getElementById('meals-note').textContent = totalRated>0
+    ? `${totalGreen} saludables · ${totalYellow} más o menos · ${totalRed} comida basura de ${totalRated} comidas calificadas`
+    : 'Aún no has calificado comidas esta semana';
+
+  const bd = document.getElementById('meals-breakdown');
+  bd.innerHTML = '';
+  MEALS.forEach(m=>{
+    const vals = state.meals[m.id]||[];
+    let r=0,y=0,g=0;
+    vals.forEach(v=>{ if(v==='red')r++; else if(v==='yellow')y++; else if(v==='green')g++; });
+    const total = r+y+g;
+    const rPct = total>0?r/total*100:0, yPct=total>0?y/total*100:0, gPct=total>0?g/total*100:0;
+    bd.innerHTML += `<div class="meal-bd-row">
+      <div class="meal-bd-lbl">${m.emoji} ${m.name}</div>
+      <div class="meal-bd-track">
+        <div class="meal-bd-seg" style="width:${gPct}%;background:#3cb37a;"></div>
+        <div class="meal-bd-seg" style="width:${yPct}%;background:#e8a020;"></div>
+        <div class="meal-bd-seg" style="width:${rPct}%;background:#e05070;"></div>
+      </div>
+    </div>`;
+  });
 
   // Insights
   let bestH=null,worstH=null,bestDayIdx=0; let bPct=-1,wPct=101;
