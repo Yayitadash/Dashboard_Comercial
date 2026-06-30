@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Mis Hábitos">
+<title>Mis Hábitos 🌸</title>
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj4KICA8cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgcng9IjIyIiBmaWxsPSIjYzA2MDkwIi8+CiAgPGVsbGlwc2UgY3g9IjUwIiBjeT0iMjgiIHJ4PSI4IiByeT0iMTQiIGZpbGw9IiNmNGEwYzgiIG9wYWNpdHk9IjAuOSIvPgogIDxlbGxpcHNlIGN4PSI1MCIgY3k9IjcyIiByeD0iOCIgcnk9IjE0IiBmaWxsPSIjZjRhMGM4IiBvcGFjaXR5PSIwLjkiLz4KICA8ZWxsaXBzZSBjeD0iMjgiIGN5PSI1MCIgcng9IjE0IiByeT0iOCIgZmlsbD0iI2Y0YTBjOCIgb3BhY2l0eT0iMC45Ii8+CiAgPGVsbGlwc2UgY3g9IjcyIiBjeT0iNTAiIHJ4PSIxNCIgcnk9IjgiIGZpbGw9IiNmNGEwYzgiIG9wYWNpdHk9IjAuOSIvPgogIDxlbGxpcHNlIGN4PSIzMyIgY3k9IjMzIiByeD0iOCIgcnk9IjE0IiBmaWxsPSIjZjRhMGM4IiBvcGFjaXR5PSIwLjg1IiB0cmFuc2Zvcm09InJvdGF0ZSg0NSAzMyAzMykiLz4KICA8ZWxsaXBzZSBjeD0iNjciIGN5PSIzMyIgcng9IjgiIHJ5PSIxNCIgZmlsbD0iI2Y0YTBjOCIgb3BhY2l0eT0iMC44NSIgdHJhbnNmb3JtPSJyb3RhdGUoLTQ1IDY3IDMzKSIvPgogIDxlbGxpcHNlIGN4PSIzMyIgY3k9IjY3IiByeD0iOCIgcnk9IjE0IiBmaWxsPSIjZjRhMGM4IiBvcGFjaXR5PSIwLjg1IiB0cmFuc2Zvcm09InJvdGF0ZSgtNDUgMzMgNjcpIi8+CiAgPGVsbGlwc2UgY3g9IjY3IiBjeT0iNjciIHJ4PSI4IiByeT0iMTQiIGZpbGw9IiNmNGEwYzgiIG9wYWNpdHk9IjAuODUiIHRyYW5zZm9ybT0icm90YXRlKDQ1IDY3IDY3KSIvPgogIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjE0IiBmaWxsPSIjZmZmMGY2Ii8+CiAgPGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iOSIgZmlsbD0iI2Y4YzBkOCIvPgogIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjUiIGZpbGw9IiNjMDYwOTAiLz4KPC9zdmc+">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  :root {
+    --pink: #c06090;
+    --pink-light: #f4d0e0;
+    --green: #3cb37a;
+    --amber: #e8a020;
+    --red: #e05070;
+    --blue: #3b8ad4;
+    --surface: #fff;
+    --surface1: #f9f4f7;
+    --surface2: #f2eaf0;
+    --text: #2a1a24;
+    --text2: #7a5a6a;
+    --text3: #b09aaa;
+    --border: rgba(192,96,144,0.15);
+    --radius: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --surface: #1e1318; --surface1: #271820; --surface2: #301e28;
+      --text: #f0e0e8; --text2: #c09aaa; --text3: #806070;
+      --border: rgba(192,96,144,0.2);
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--surface1); color: var(--text); min-height: 100vh; }
+  .app { max-width: 480px; margin: 0 auto; padding: 0 0 80px; }
+
+  /* Hero */
+  .hero { background: linear-gradient(135deg, #d47fa6, #c06090); padding: 1.5rem 1rem 1.2rem; text-align: center; color: white; }
+  .hero h1 { font-size: 22px; font-weight: 600; margin: 6px 0 4px; }
+  .hero p { font-size: 13px; opacity: 0.85; }
+
+  /* Bottom tabs */
+  .bottom-tabs { position: fixed; bottom: 0; left: 0; right: 0; background: var(--surface); border-top: 1px solid var(--border); display: flex; z-index: 100; max-width: 480px; margin: 0 auto; }
+  .btab { flex: 1; padding: 10px 0 12px; text-align: center; cursor: pointer; font-size: 11px; color: var(--text3); transition: color 0.15s; }
+  .btab .btab-icon { font-size: 22px; display: block; margin-bottom: 2px; }
+  .btab.active { color: var(--pink); }
+
+  /* Week nav */
+  .week-nav { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: var(--surface); border-bottom: 1px solid var(--border); }
+  .week-nav button { background: none; border: 1px solid var(--border); border-radius: 8px; padding: 6px 14px; cursor: pointer; color: var(--text2); font-size: 13px; }
+  .week-title { font-size: 14px; font-weight: 500; color: var(--text); }
+
+  /* Section */
+  .section-label { font-size: 11px; font-weight: 600; color: var(--pink); letter-spacing: 0.07em; text-transform: uppercase; padding: 14px 16px 6px; }
+
+  /* Habit rows */
+  .habits-block { background: var(--surface); margin: 0 12px 2px; border-radius: var(--radius); overflow: hidden; }
+  .habit-row { display: flex; align-items: center; padding: 10px 14px; border-bottom: 1px solid var(--border); gap: 8px; }
+  .habit-row:last-child { border-bottom: none; }
+  .habit-name { font-size: 13px; color: var(--text); flex: 1; line-height: 1.3; }
+  .habit-emoji { font-size: 16px; width: 24px; flex-shrink: 0; }
+  .week-cells { display: flex; gap: 5px; flex-shrink: 0; }
+  .cell { width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid var(--border); background: var(--surface1); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--text3); transition: all 0.12s; user-select: none; flex-shrink: 0; }
+  .cell.done { background: var(--green); border-color: var(--green); color: white; font-size: 12px; }
+  .cell.fail { background: #f5eaee; border-color: #e0c0cc; color: #c08090; }
+  @media (prefers-color-scheme: dark) { .cell.fail { background: #2e1a22; border-color: #5a3040; color: #9a6070; } }
+  .prayer-cell { width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid var(--border); background: var(--surface1); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; color: var(--text3); transition: all 0.12s; user-select: none; flex-shrink: 0; }
+  .prayer-cell.yes { background: var(--green); border-color: var(--green); color: white; }
+  .prayer-cell.no  { background: #f5eaee; border-color: #e0c0cc; color: #c08090; }
+  @media (prefers-color-scheme: dark) { .prayer-cell.no { background: #2e1a22; border-color: #5a3040; color: #9a6070; } }
+
+  /* Day header */
+  .day-header-row { display: flex; align-items: center; padding: 0 14px 4px; gap: 8px; }
+  .day-header-spacer { flex: 1; }
+  .day-header-cells { display: flex; gap: 5px; }
+  .day-hdr { width: 28px; text-align: center; font-size: 10px; color: var(--text3); font-weight: 500; }
+
+  /* Card */
+  .card { background: var(--surface); margin: 0 12px 12px; border-radius: var(--radius); padding: 14px; }
+  .card-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 12px; }
+
+  /* Water */
+  .water-day-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .water-day-lbl { font-size: 12px; color: var(--text3); width: 26px; text-align: right; flex-shrink: 0; }
+  .water-cups { display: flex; gap: 6px; }
+  .water-cup { width: 32px; height: 32px; border-radius: 6px; border: 1.5px solid var(--border); background: var(--surface1); cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.12s; flex-shrink: 0; }
+  .water-cup.filled { background: var(--blue); border-color: var(--blue); }
+  .water-oz { font-size: 11px; color: var(--text3); margin-left: 4px; }
+
+  /* Stress */
+  .stress-day-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .stress-day-lbl { font-size: 12px; color: var(--text3); width: 26px; text-align: right; flex-shrink: 0; }
+  .stress-btns { display: flex; gap: 6px; }
+  .stress-btn { width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid var(--border); background: var(--surface1); cursor: pointer; font-size: 13px; color: var(--text2); transition: all 0.12s; font-weight: 500; }
+  .stress-btn.sel { background: var(--pink); border-color: var(--pink); color: white; }
+  .stress-word { font-size: 11px; color: var(--text3); margin-left: 2px; }
+
+  /* Traffic light meals */
+  .meal-row { display: flex; align-items: center; padding: 10px 14px; border-bottom: 1px solid var(--border); gap: 8px; }
+  .meal-row:last-child { border-bottom: none; }
+  .meal-name { font-size: 13px; color: var(--text); flex: 1; line-height: 1.3; }
+  .meal-emoji { font-size: 16px; width: 24px; flex-shrink: 0; }
+  .meal-cells { display: flex; gap: 5px; flex-shrink: 0; }
+  .meal-cell { width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid var(--border); background: var(--surface1); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 13px; transition: all 0.12s; user-select: none; flex-shrink: 0; }
+  .meal-cell.red    { background: #f4cdd6; border-color: var(--red); }
+  .meal-cell.yellow { background: #fbe6c4; border-color: var(--amber); }
+  .meal-cell.green  { background: #c9eed9; border-color: var(--green); }
+  @media (prefers-color-scheme: dark) {
+    .meal-cell.red    { background: #4a2028; }
+    .meal-cell.yellow { background: #4a3a18; }
+    .meal-cell.green  { background: #1a3328; }
+  }
+  .legend-row { display: flex; gap: 14px; padding: 0 14px 12px; font-size: 11px; color: var(--text3); flex-wrap: wrap; }
+  .legend-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: middle; }
+
+  /* Metrics */
+  .metric-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0 12px 12px; }
+  .metric { background: var(--surface); border-radius: var(--radius); padding: 14px 12px; text-align: center; }
+  .metric-val { font-size: 26px; font-weight: 600; color: var(--pink); }
+  .metric-lbl { font-size: 11px; color: var(--text3); margin-top: 3px; }
+
+  /* Bars */
+  .bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .bar-lbl { font-size: 12px; color: var(--text2); width: 56px; flex-shrink: 0; }
+  .bar-track { flex: 1; height: 10px; background: var(--surface1); border-radius: 5px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 5px; transition: width 0.4s; }
+  .bar-pct { font-size: 11px; color: var(--text3); width: 32px; text-align: right; flex-shrink: 0; }
+
+  .hbar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+  .hbar-lbl { font-size: 11px; color: var(--text2); width: 140px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: right; }
+  .hbar-track { flex: 1; height: 9px; background: var(--surface1); border-radius: 5px; overflow: hidden; }
+  .hbar-fill { height: 100%; border-radius: 5px; transition: width 0.4s; }
+  .hbar-pct { font-size: 11px; color: var(--text3); width: 30px; text-align: right; flex-shrink: 0; }
+
+  /* Meal breakdown */
+  .meal-bd-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .meal-bd-lbl { font-size: 12px; color: var(--text2); width: 70px; flex-shrink: 0; }
+  .meal-bd-track { flex: 1; height: 14px; border-radius: 7px; overflow: hidden; display: flex; background: var(--surface1); }
+  .meal-bd-seg { height: 100%; }
+
+  /* Insight cards */
+  .insight-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin: 0 12px 12px; }
+  .insight-card { border-radius: var(--radius); padding: 12px 8px; text-align: center; }
+  .insight-card.green { background: #eaf8f0; border: 1px solid #b2dfc6; }
+  .insight-card.pink  { background: #fde8ef; border: 1px solid #f4b8cc; }
+  .insight-card.gold  { background: #fef5e0; border: 1px solid #f0d080; }
+  @media (prefers-color-scheme: dark) {
+    .insight-card.green { background: #1a3328; border-color: #2d6048; }
+    .insight-card.pink  { background: #3a1a24; border-color: #7a3050; }
+    .insight-card.gold  { background: #3a2e10; border-color: #806020; }
+  }
+  .ic-emoji { font-size: 22px; margin-bottom: 5px; }
+  .ic-lbl { font-size: 10px; color: var(--text3); margin-bottom: 3px; }
+  .ic-val { font-size: 12px; font-weight: 600; color: var(--text); line-height: 1.3; }
+
+  /* Chart */
+  .chart-wrap { position: relative; width: 100%; }
+  .chart-note { font-size: 11px; color: var(--text3); text-align: center; margin-top: 6px; }
+
+  /* Toast */
+  .toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: var(--green); color: white; padding: 10px 22px; border-radius: 20px; font-size: 14px; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 999; white-space: nowrap; }
+  .toast.show { opacity: 1; }
+
+  /* Save btn */
+  .save-btn { display: block; margin: 12px 12px 0; width: calc(100% - 24px); padding: 14px; background: var(--pink); color: white; border: none; border-radius: var(--radius); font-size: 15px; font-weight: 600; cursor: pointer; }
+
+  /* Install banner */
+  .install-banner { background: #fff8f0; border: 1px solid #f0d080; border-radius: var(--radius); margin: 12px 12px 0; padding: 12px 14px; font-size: 12px; color: #7a5a20; line-height: 1.5; }
+  .install-banner strong { display: block; margin-bottom: 4px; font-size: 13px; }
+  .install-close { float: right; cursor: pointer; font-size: 16px; color: #b09060; margin-top: -2px; }
+  @media (prefers-color-scheme: dark) {
+    .install-banner { background: #2e2510; border-color: #6a5010; color: #d0a060; }
+    .install-close { color: #a08040; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="hero">
+    <div style="font-size:30px;">🌸</div>
+    <h1>Mis Hábitos</h1>
+    <p id="week-subtitle">Semana actual</p>
+  </div>
+
+  <!-- REGISTRO -->
+  <div id="tab-registro">
+    <div id="install-banner" class="install-banner" style="display:none;">
+      <span class="install-close" onclick="document.getElementById('install-banner').style.display='none'">✕</span>
+      <strong>📱 Agregar a tu pantalla de inicio</strong>
+      En Safari: toca el botón compartir (⬆️) → "Agregar a pantalla de inicio". ¡Así funciona como app!
+    </div>
+    <div class="week-nav">
+      <button onclick="changeWeek(-1)">← Anterior</button>
+      <div class="week-title" id="week-title-reg">—</div>
+      <button onclick="changeWeek(1)">Siguiente →</button>
+    </div>
+    <div class="day-header-row">
+      <div class="day-header-spacer" style="flex:1;padding-left:32px;"></div>
+      <div class="day-header-cells" id="day-headers"></div>
+    </div>
+    <div class="section-label">☀️ Mañana</div>
+    <div class="habits-block" id="habits-manana"></div>
+    <div class="section-label">🌤 Durante el día</div>
+    <div class="habits-block" id="habits-dia"></div>
+    <div class="section-label">🌙 Noche</div>
+    <div class="habits-block" id="habits-noche"></div>
+    <div class="section-label">🚦 Calidad de comidas</div>
+    <div class="habits-block" id="meals-rows"></div>
+    <div class="legend-row">
+      <span><span class="legend-dot" style="background:var(--red);"></span>Comida basura</span>
+      <span><span class="legend-dot" style="background:var(--amber);"></span>Más o menos</span>
+      <span><span class="legend-dot" style="background:var(--green);"></span>Saludable</span>
+    </div>
+
+    <div class="section-label">💧 Agua (vasos de 20 oz)</div>
+    <div class="card"><div id="water-rows"></div></div>
+    <div class="section-label">😌 Nivel de estrés</div>
+    <div class="card"><div id="stress-rows"></div></div>
+    <button class="save-btn" onclick="saveData()">Guardar ✓</button>
+    <div style="height:8px;"></div>
+  </div>
+
+  <!-- GRÁFICAS -->
+  <div id="tab-graficas" style="display:none;">
+    <div class="week-nav">
+      <button onclick="changeWeek(-1)">← Anterior</button>
+      <div class="week-title" id="week-title-graf">—</div>
+      <button onclick="changeWeek(1)">Siguiente →</button>
+    </div>
+    <div style="height:12px;"></div>
+    <div class="metric-grid" id="metric-cards"></div>
+    <div class="card">
+      <div class="card-title">📅 Cumplimiento diario (%)</div>
+      <div id="daily-bars"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">✅ Por hábito (%)</div>
+      <div id="habit-bars"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">💧 Consumo de agua (oz)</div>
+      <div class="chart-wrap" style="height:160px;"><canvas id="water-chart" role="img" aria-label="Consumo de agua por día"></canvas></div>
+      <div class="chart-note" id="water-note"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">🧠 Nivel de estrés (0=bajo, 3=alto)</div>
+      <div class="chart-wrap" style="height:160px;"><canvas id="stress-chart" role="img" aria-label="Nivel de estrés por día"></canvas></div>
+      <div class="chart-note" id="stress-note"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">🚦 Calidad de comidas</div>
+      <div class="chart-wrap" style="height:170px;"><canvas id="meals-chart" role="img" aria-label="Calidad de comidas por día"></canvas></div>
+      <div class="chart-note" id="meals-note"></div>
+      <div style="height:10px;"></div>
+      <div id="meals-breakdown"></div>
+    </div>
+    <div class="insight-grid" id="insight-cards"></div>
+  </div>
+</div>
+
+<!-- Bottom tabs -->
+<div class="bottom-tabs">
+  <div class="btab active" id="btab-registro" onclick="showTab('registro')">
+    <span class="btab-icon">📋</span>Registro
+  </div>
+  <div class="btab" id="btab-graficas" onclick="showTab('graficas')">
+    <span class="btab-icon">📊</span>Gráficas
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const DAYS = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+const WATER_CUPS = 4, WATER_OZ = 20, WATER_GOAL = 80;
+
+const HABITS = {
+  manana: [
+    { id:'oracion',     emoji:'🙏', name:'Oración matutina',         type:'prayer' },
+    { id:'dormir8',     emoji:'😴', name:'Dormir 7 a 8 horas' },
+    { id:'sol',         emoji:'☀️', name:'Tomar sol 10 min' },
+    { id:'desayuno',    emoji:'🥚', name:'Desayuno proteico' },
+    { id:'vitaminas',   emoji:'💊', name:'Vitaminas matutinas' },
+    { id:'actfisica_m', emoji:'🏃', name:'Actividad física (mañana)' },
+  ],
+  dia: [
+    { id:'almuerzo',      emoji:'🥗', name:'Almuerzo proteico' },
+    { id:'actfisica_t',   emoji:'🏋️', name:'Actividad física (tarde)' },
+    { id:'antojos',       emoji:'🚫', name:'Control de antojos' },
+    { id:'cena',          emoji:'🍽️', name:'Cena liviana o proteica' },
+    { id:'actfisica_n',   emoji:'🧘', name:'Actividad física (noche)' },
+    { id:'ultimacomida',  emoji:'⏰', name:'Última comida antes 6pm' },
+  ],
+  noche: [
+    { id:'dormirtemprano', emoji:'🌙', name:'Dormir temprano' },
+    { id:'pantalla',       emoji:'📵', name:'Cero pantalla en cama' },
+  ]
+};
+const ALL_HABITS = [...HABITS.manana, ...HABITS.dia, ...HABITS.noche];
+const MEALS = [
+  { id:'meal_desayuno', emoji:'🍳', name:'Desayuno' },
+  { id:'meal_almuerzo', emoji:'🍲', name:'Almuerzo' },
+  { id:'meal_cena',     emoji:'🌙', name:'Cena' },
+];
+
+let currentMonday = getMondayOf(new Date());
+let state = {};
+let waterChart = null, stressChart = null;
+
+function getMondayOf(date) {
+  const d = new Date(date), day = d.getDay();
+  d.setDate(d.getDate() + (day===0?-6:1-day)); d.setHours(0,0,0,0); return d;
+}
+function weekKey(m) { return m.toISOString().slice(0,10); }
+function formatWeekRange(m) {
+  const sun = new Date(m); sun.setDate(sun.getDate()+6);
+  const mo=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  return `${m.getDate()} al ${sun.getDate()} de ${mo[sun.getMonth()]}`;
+}
+function storageKey(m) { return 'habitos_week_'+weekKey(m); }
+
+function loadWeek(m) {
+  const key = storageKey(m);
+  const saved = localStorage.getItem(key);
+  state = saved ? JSON.parse(saved) : initState();
+  if(!state.meals) {
+    state.meals = {};
+    MEALS.forEach(mm => { state.meals[mm.id] = Array(7).fill(null); });
+  }
+  render();
+}
+function initState() {
+  const s = { habits:{}, water:{}, stress:{}, meals:{} };
+  ALL_HABITS.forEach(h => { s.habits[h.id] = Array(7).fill(null); });
+  MEALS.forEach(m => { s.meals[m.id] = Array(7).fill(null); });
+  for(let i=0;i<7;i++) { s.water[i]=0; s.stress[i]=null; }
+  return s;
+}
+function autoSave() {
+  localStorage.setItem(storageKey(currentMonday), JSON.stringify(state));
+}
+function saveData() {
+  autoSave(); showToast('✓ Guardado en tu teléfono');
+}
+function showToast(msg) {
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+function showTab(name) {
+  document.getElementById('tab-registro').style.display = name==='registro'?'':'none';
+  document.getElementById('tab-graficas').style.display = name==='graficas'?'':'none';
+  document.getElementById('btab-registro').classList.toggle('active',name==='registro');
+  document.getElementById('btab-graficas').classList.toggle('active',name==='graficas');
+  if(name==='graficas') setTimeout(renderCharts,50);
+}
+function changeWeek(dir) {
+  currentMonday = new Date(currentMonday);
+  currentMonday.setDate(currentMonday.getDate()+dir*7);
+  loadWeek(currentMonday);
+}
+
+function toggleHabit(id, di) {
+  const cur = state.habits[id][di];
+  state.habits[id][di] = cur===null?true:cur===true?false:null;
+  renderHabits(); autoSave();
+}
+function togglePrayer(di) {
+  const cur = state.habits['oracion'][di];
+  state.habits['oracion'][di] = cur===null?true:cur===true?false:null;
+  renderHabits(); autoSave();
+}
+function toggleMeal(mealId, di) {
+  const order = [null, 'red', 'yellow', 'green'];
+  const cur = state.meals[mealId][di];
+  const idx = order.indexOf(cur);
+  state.meals[mealId][di] = order[(idx+1) % order.length];
+  renderMeals(); autoSave();
+}
+
+function renderDayHeaders() {
+  const c=document.getElementById('day-headers'); c.innerHTML='';
+  DAYS.forEach(d=>{ const el=document.createElement('div'); el.className='day-hdr'; el.textContent=d.slice(0,1); c.appendChild(el); });
+}
+
+function renderHabitSection(cid, habits) {
+  const c=document.getElementById(cid); if(!c) return; c.innerHTML='';
+  habits.forEach(h=>{
+    const row=document.createElement('div'); row.className='habit-row';
+    const em=document.createElement('div'); em.className='habit-emoji'; em.textContent=h.emoji;
+    const nm=document.createElement('div'); nm.className='habit-name'; nm.textContent=h.name;
+    const cells=document.createElement('div'); cells.className='week-cells';
+    for(let i=0;i<7;i++){
+      const val=(state.habits[h.id]||[])[i]??null;
+      if(h.type==='prayer'){
+        const cell=document.createElement('div');
+        cell.className='prayer-cell'+(val===true?' yes':val===false?' no':'');
+        cell.textContent=val===true?'Sí':val===false?'No':'';
+        const di=i; cell.onclick=()=>togglePrayer(di); cells.appendChild(cell);
+      } else {
+        const cell=document.createElement('div');
+        cell.className='cell'+(val===true?' done':val===false?' fail':'');
+        cell.textContent=val===true?'✓':val===false?'✗':'';
+        const di=i,hi=h.id; cell.onclick=()=>toggleHabit(hi,di); cells.appendChild(cell);
+      }
+    }
+    row.appendChild(em); row.appendChild(nm); row.appendChild(cells); c.appendChild(row);
+  });
+}
+function renderHabits() {
+  renderHabitSection('habits-manana',HABITS.manana);
+  renderHabitSection('habits-dia',HABITS.dia);
+  renderHabitSection('habits-noche',HABITS.noche);
+}
+function renderMeals() {
+  const c=document.getElementById('meals-rows'); if(!c) return; c.innerHTML='';
+  MEALS.forEach(m=>{
+    const row=document.createElement('div'); row.className='meal-row';
+    const em=document.createElement('div'); em.className='meal-emoji'; em.textContent=m.emoji;
+    const nm=document.createElement('div'); nm.className='meal-name'; nm.textContent=m.name;
+    const cells=document.createElement('div'); cells.className='meal-cells';
+    for(let i=0;i<7;i++){
+      const val=(state.meals[m.id]||[])[i]??null;
+      const cell=document.createElement('div');
+      cell.className='meal-cell'+(val?' '+val:'');
+      cell.textContent=val==='red'?'🔴':val==='yellow'?'🟡':val==='green'?'🟢':'';
+      const di=i, mi=m.id;
+      cell.onclick=()=>toggleMeal(mi,di);
+      cells.appendChild(cell);
+    }
+    row.appendChild(em); row.appendChild(nm); row.appendChild(cells); c.appendChild(row);
+  });
+}
+function renderWater() {
+  const c=document.getElementById('water-rows'); if(!c) return; c.innerHTML='';
+  for(let i=0;i<7;i++){
+    const row=document.createElement('div'); row.className='water-day-row';
+    const lbl=document.createElement('div'); lbl.className='water-day-lbl'; lbl.textContent=DAYS[i].slice(0,1);
+    const cups=document.createElement('div'); cups.className='water-cups';
+    const count=state.water[i]||0;
+    for(let c2=0;c2<WATER_CUPS;c2++){
+      const cup=document.createElement('div'); cup.className='water-cup'+(c2<count?' filled':''); cup.textContent='💧';
+      const ci=c2,di=i; cup.onclick=()=>{ state.water[di]=(state.water[di]===ci+1)?ci:ci+1; renderWater(); autoSave(); };
+      cups.appendChild(cup);
+    }
+    const oz=document.createElement('div'); oz.className='water-oz'; oz.textContent=`${count*WATER_OZ}oz`;
+    row.appendChild(lbl); row.appendChild(cups); row.appendChild(oz); c.appendChild(row);
+  }
+}
+function renderStress() {
+  const c=document.getElementById('stress-rows'); if(!c) return; c.innerHTML='';
+  for(let i=0;i<7;i++){
+    const row=document.createElement('div'); row.className='stress-day-row';
+    const lbl=document.createElement('div'); lbl.className='stress-day-lbl'; lbl.textContent=DAYS[i].slice(0,1);
+    const btns=document.createElement('div'); btns.className='stress-btns';
+    [0,1,2,3].forEach(v=>{
+      const btn=document.createElement('button'); btn.className='stress-btn'+(state.stress[i]===v?' sel':''); btn.textContent=v;
+      const vi=v,di=i; btn.onclick=()=>{ state.stress[di]=state.stress[di]===vi?null:vi; renderStress(); autoSave(); };
+      btns.appendChild(btn);
+    });
+    const word=document.createElement('div'); word.className='stress-word';
+    word.textContent=state.stress[i]!==null?['😌','🙂','😐','😰'][state.stress[i]]:'';
+    row.appendChild(lbl); row.appendChild(btns); row.appendChild(word); c.appendChild(row);
+  }
+}
+function render() {
+  const range=formatWeekRange(currentMonday);
+  document.getElementById('week-subtitle').textContent=`Semana del ${range}`;
+  document.getElementById('week-title-reg').textContent=range;
+  document.getElementById('week-title-graf').textContent=range;
+  renderDayHeaders(); renderHabits(); renderMeals(); renderWater(); renderStress();
+}
+
+function calcDayPct(di) {
+  let done=0,total=0;
+  ALL_HABITS.forEach(h=>{ const v=(state.habits[h.id]||[])[di]; if(v!==null){total++;if(v===true)done++;} });
+  return total>0?Math.round(done/total*100):0;
+}
+function calcHabitPct(id) {
+  let done=0,total=0;
+  (state.habits[id]||[]).forEach(v=>{ if(v!==null){total++;if(v===true)done++;} });
+  return total>0?Math.round(done/total*100):0;
+}
+function barColor(p){ return p>=80?'#3cb37a':p>=50?'#e8a020':'#e05070'; }
+
+function renderCharts() {
+  const pcts=DAYS.map((_,i)=>calcDayPct(i));
+  const avg=Math.round(pcts.reduce((a,b)=>a+b,0)/7);
+  const best=Math.max(...pcts);
+  const prayerDone=(state.habits['oracion']||[]).filter(v=>v===true).length;
+  const waterVals=DAYS.map((_,i)=>(state.water[i]||0)*WATER_OZ);
+  const waterAvg=Math.round(waterVals.reduce((a,b)=>a+b,0)/7);
+
+  let greenMeals=0, totalMeals=0;
+  MEALS.forEach(m=>{ (state.meals[m.id]||[]).forEach(v=>{ if(v){ totalMeals++; if(v==='green') greenMeals++; } }); });
+  const mealQualityPct = totalMeals>0 ? Math.round(greenMeals/totalMeals*100) : 0;
+
+  document.getElementById('metric-cards').innerHTML=`
+    <div class="metric"><div class="metric-val">${avg}%</div><div class="metric-lbl">Promedio semanal</div></div>
+    <div class="metric"><div class="metric-val">${best}%</div><div class="metric-lbl">Mejor día</div></div>
+    <div class="metric"><div class="metric-val">${prayerDone}/7</div><div class="metric-lbl">Días de oración</div></div>
+    <div class="metric"><div class="metric-val">${waterAvg}oz</div><div class="metric-lbl">Agua promedio/día</div></div>
+    <div class="metric"><div class="metric-val">${mealQualityPct}%</div><div class="metric-lbl">🟢 Comidas saludables</div></div>
+  `;
+
+  const db=document.getElementById('daily-bars'); db.innerHTML='';
+  pcts.forEach((p,i)=>{
+    db.innerHTML+=`<div class="bar-row">
+      <div class="bar-lbl">${DAYS[i]}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${p}%;background:${barColor(p)};"></div></div>
+      <div class="bar-pct">${p}%</div>
+    </div>`;
+  });
+
+  const hb=document.getElementById('habit-bars'); hb.innerHTML='';
+  ALL_HABITS.forEach(h=>{
+    const pct=calcHabitPct(h.id);
+    hb.innerHTML+=`<div class="hbar-row">
+      <div class="hbar-lbl">${h.emoji} ${h.name}</div>
+      <div class="hbar-track"><div class="hbar-fill" style="width:${pct}%;background:${barColor(pct)};"></div></div>
+      <div class="hbar-pct">${pct}%</div>
+    </div>`;
+  });
+
+  // Water chart
+  if(waterChart){waterChart.destroy();waterChart=null;}
+  const wCtx=document.getElementById('water-chart').getContext('2d');
+  waterChart=new Chart(wCtx,{
+    type:'bar',
+    data:{
+      labels:DAYS.map((d,i)=>{ const dt=new Date(currentMonday); dt.setDate(dt.getDate()+i); return `${d} ${dt.getDate()}`; }),
+      datasets:[{ data:waterVals, backgroundColor:waterVals.map(v=>v>=WATER_GOAL?'#3cb37a':'#e07090'), borderRadius:5, borderSkipped:false }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.raw} oz`}}},
+      scales:{
+        x:{grid:{display:false},ticks:{color:'#b09aaa',font:{size:10}}},
+        y:{min:0,max:WATER_GOAL+20,grid:{color:'rgba(192,96,144,0.08)'},ticks:{color:'#b09aaa',font:{size:10},callback:v=>`${v}oz`}}
+      }
+    }
+  });
+  document.getElementById('water-note').textContent=`Meta: ${WATER_GOAL} oz · Verde = meta cumplida · Rosa = debajo de meta`;
+
+  // Stress chart
+  if(stressChart){stressChart.destroy();stressChart=null;}
+  const sCtx=document.getElementById('stress-chart').getContext('2d');
+  const stressVals=DAYS.map((_,i)=>state.stress[i]);
+  stressChart=new Chart(sCtx,{
+    type:'line',
+    data:{
+      labels:DAYS.map((d,i)=>{ const dt=new Date(currentMonday); dt.setDate(dt.getDate()+i); return `${d} ${dt.getDate()}`; }),
+      datasets:[{
+        data:stressVals,
+        borderColor:'#c06090',backgroundColor:'rgba(192,96,144,0.08)',
+        borderWidth:2,pointBackgroundColor:'#c06090',pointRadius:5,tension:0.3,fill:true,spanGaps:true
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.raw!==null?['sin estrés','leve','moderado','alto'][ctx.raw]:'—'}}},
+      scales:{
+        x:{grid:{display:false},ticks:{color:'#b09aaa',font:{size:10}}},
+        y:{min:0,max:3,stepSize:1,grid:{color:'rgba(192,96,144,0.08)'},ticks:{color:'#b09aaa',font:{size:10},stepSize:1}}
+      }
+    }
+  });
+  const filled=stressVals.filter(v=>v!==null);
+  if(filled.length>=2){
+    const first=filled[0],last=filled[filled.length-1];
+    document.getElementById('stress-note').textContent=first>last?`¡Tu estrés bajó de ${first} a ${last} esta semana! 🌸`:first<last?`Tu estrés subió de ${first} a ${last} esta semana.`:`Tu estrés se mantuvo estable en ${first}.`;
+  } else { document.getElementById('stress-note').textContent=''; }
+
+  // Meals stacked chart
+  const redByDay=[], yellowByDay=[], greenByDay=[];
+  for(let i=0;i<7;i++){
+    let r=0,y=0,g=0;
+    MEALS.forEach(m=>{
+      const v=(state.meals[m.id]||[])[i];
+      if(v==='red') r++; else if(v==='yellow') y++; else if(v==='green') g++;
+    });
+    redByDay.push(r); yellowByDay.push(y); greenByDay.push(g);
+  }
+  if(window._mealsChart){ window._mealsChart.destroy(); window._mealsChart=null; }
+  const mCtx=document.getElementById('meals-chart').getContext('2d');
+  window._mealsChart=new Chart(mCtx,{
+    type:'bar',
+    data:{
+      labels:DAYS.map((d,i)=>{ const dt=new Date(currentMonday); dt.setDate(dt.getDate()+i); return `${d} ${dt.getDate()}`; }),
+      datasets:[
+        { label:'Saludable', data:greenByDay, backgroundColor:'#3cb37a', stack:'s' },
+        { label:'Más o menos', data:yellowByDay, backgroundColor:'#e8a020', stack:'s' },
+        { label:'Comida basura', data:redByDay, backgroundColor:'#e05070', stack:'s' },
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{ legend:{display:true,position:'bottom',labels:{boxWidth:10,font:{size:10},color:'#b09aaa'}}, tooltip:{} },
+      scales:{
+        x:{ stacked:true, grid:{display:false}, ticks:{color:'#b09aaa',font:{size:10}} },
+        y:{ stacked:true, min:0, max:3, stepSize:1, grid:{color:'rgba(192,96,144,0.08)'}, ticks:{color:'#b09aaa',font:{size:10},stepSize:1} }
+      }
+    }
+  });
+
+  let totalGreen=0, totalYellow=0, totalRed=0;
+  redByDay.forEach(v=>totalRed+=v); yellowByDay.forEach(v=>totalYellow+=v); greenByDay.forEach(v=>totalGreen+=v);
+  const totalRated = totalGreen+totalYellow+totalRed;
+  document.getElementById('meals-note').textContent = totalRated>0
+    ? `${totalGreen} saludables · ${totalYellow} más o menos · ${totalRed} comida basura de ${totalRated} comidas calificadas`
+    : 'Aún no has calificado comidas esta semana';
+
+  const bd = document.getElementById('meals-breakdown');
+  bd.innerHTML = '';
+  MEALS.forEach(m=>{
+    const vals = state.meals[m.id]||[];
+    let r=0,y=0,g=0;
+    vals.forEach(v=>{ if(v==='red')r++; else if(v==='yellow')y++; else if(v==='green')g++; });
+    const total = r+y+g;
+    const rPct = total>0?r/total*100:0, yPct=total>0?y/total*100:0, gPct=total>0?g/total*100:0;
+    bd.innerHTML += `<div class="meal-bd-row">
+      <div class="meal-bd-lbl">${m.emoji} ${m.name}</div>
+      <div class="meal-bd-track">
+        <div class="meal-bd-seg" style="width:${gPct}%;background:#3cb37a;"></div>
+        <div class="meal-bd-seg" style="width:${yPct}%;background:#e8a020;"></div>
+        <div class="meal-bd-seg" style="width:${rPct}%;background:#e05070;"></div>
+      </div>
+    </div>`;
+  });
+
+  // Insights
+  let bestH=null,worstH=null,bestDayIdx=0; let bPct=-1,wPct=101;
+  ALL_HABITS.forEach(h=>{ const p=calcHabitPct(h.id); if(p>bPct){bPct=p;bestH=h;} if(p<wPct){wPct=p;worstH=h;} });
+  pcts.forEach((p,i)=>{ if(p>pcts[bestDayIdx]) bestDayIdx=i; });
+  const bDate=new Date(currentMonday); bDate.setDate(bDate.getDate()+bestDayIdx);
+  const mo=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  document.getElementById('insight-cards').innerHTML=`
+    <div class="insight-card green"><div class="ic-emoji">🏆</div><div class="ic-lbl">Mejor hábito</div><div class="ic-val">${bestH?bestH.emoji+' '+bestH.name:'—'}</div></div>
+    <div class="insight-card pink"><div class="ic-emoji">💪</div><div class="ic-lbl">A reforzar</div><div class="ic-val">${worstH?worstH.emoji+' '+worstH.name:'—'}</div></div>
+    <div class="insight-card gold"><div class="ic-emoji">⭐</div><div class="ic-lbl">Mejor día</div><div class="ic-val">${DAYS[bestDayIdx]} ${bDate.getDate()} ${mo[bDate.getMonth()]}</div></div>
+  `;
+}
+
+// Show install tip on iOS
+if(/iphone|ipad|ipod/i.test(navigator.userAgent) && !window.navigator.standalone) {
+  document.getElementById('install-banner').style.display='block';
+}
+
+loadWeek(currentMonday);
+</script>
+</body>
+</html>
