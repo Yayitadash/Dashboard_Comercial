@@ -176,14 +176,48 @@
     .install-banner { background: #2e2510; border-color: #6a5010; color: #d0a060; }
     .install-close { color: #a08040; }
   }
+
+  /* Profile screen */
+  .profile-screen { position: fixed; inset: 0; background: linear-gradient(135deg, #d47fa6, #c06090); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 999; padding: 2rem; }
+  .profile-screen h2 { color: white; font-size: 24px; font-weight: 600; margin: 12px 0 6px; }
+  .profile-screen p { color: rgba(255,255,255,0.85); font-size: 14px; margin-bottom: 28px; text-align: center; }
+  .profile-list { width: 100%; max-width: 340px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+  .profile-btn { width: 100%; padding: 14px 18px; background: rgba(255,255,255,0.22); border: 1.5px solid rgba(255,255,255,0.4); border-radius: var(--radius); color: white; font-size: 15px; font-weight: 500; cursor: pointer; text-align: left; display: flex; align-items: center; gap: 10px; transition: background 0.15s; }
+  .profile-btn:hover { background: rgba(255,255,255,0.32); }
+  .profile-btn .pb-avatar { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .profile-new { width: 100%; max-width: 340px; display: flex; gap: 8px; }
+  .profile-new input { flex: 1; padding: 12px 14px; border-radius: var(--radius); border: 1.5px solid rgba(255,255,255,0.4); background: rgba(255,255,255,0.15); color: white; font-size: 14px; outline: none; }
+  .profile-new input::placeholder { color: rgba(255,255,255,0.6); }
+  .profile-new button { padding: 12px 16px; background: white; color: var(--pink); border: none; border-radius: var(--radius); font-size: 14px; font-weight: 600; cursor: pointer; flex-shrink: 0; }
+
+  /* Profile badge in hero */
+  .hero-profile { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 6px; }
+  .hero-profile-name { color: rgba(255,255,255,0.9); font-size: 13px; }
+  .hero-profile-btn { background: rgba(255,255,255,0.2); border: none; color: white; font-size: 11px; padding: 3px 10px; border-radius: 20px; cursor: pointer; }
 </style>
 </head>
 <body>
+<!-- PROFILE SCREEN -->
+<div id="profile-screen" class="profile-screen">
+  <div style="font-size:48px;">🌸</div>
+  <h2>Mis Hábitos</h2>
+  <p>¿Quién eres tú?</p>
+  <div class="profile-list" id="profile-list"></div>
+  <div class="profile-new">
+    <input type="text" id="profile-input" placeholder="Tu nombre..." maxlength="20" onkeydown="if(event.key==='Enter')createProfile()">
+    <button onclick="createProfile()">+ Crear</button>
+  </div>
+</div>
+
 <div class="app">
   <div class="hero">
     <div style="font-size:30px;">🌸</div>
     <h1>Mis Hábitos</h1>
-    <p id="week-subtitle">Semana actual</p>
+    <div class="hero-profile">
+      <span class="hero-profile-name" id="hero-name"></span>
+      <button class="hero-profile-btn" onclick="showProfileScreen()">Cambiar</button>
+    </div>
+    <p id="week-subtitle" style="margin-top:4px;">Semana actual</p>
   </div>
 
   <!-- REGISTRO -->
@@ -310,6 +344,58 @@ const MEALS = [
 let currentMonday = getMondayOf(new Date());
 let state = {};
 let waterChart = null, stressChart = null;
+let currentProfile = null;
+
+const AVATARS = ['🌸','🌺','🌼','🌻','💐','🍀','🌷','✨'];
+
+// ── Profile system ──────────────────────────────────────
+function getProfiles() {
+  return JSON.parse(localStorage.getItem('habitos_profiles') || '[]');
+}
+function saveProfiles(profiles) {
+  localStorage.setItem('habitos_profiles', JSON.stringify(profiles));
+}
+function showProfileScreen() {
+  document.getElementById('profile-screen').style.display = 'flex';
+  renderProfileList();
+}
+function hideProfileScreen() {
+  document.getElementById('profile-screen').style.display = 'none';
+}
+function renderProfileList() {
+  const list = document.getElementById('profile-list');
+  const profiles = getProfiles();
+  list.innerHTML = '';
+  profiles.forEach(p => {
+    const btn = document.createElement('button');
+    btn.className = 'profile-btn';
+    btn.innerHTML = `<div class="pb-avatar">${p.avatar}</div><span>${p.name}</span>`;
+    btn.onclick = () => selectProfile(p);
+    list.appendChild(btn);
+  });
+}
+function createProfile() {
+  const input = document.getElementById('profile-input');
+  const name = input.value.trim();
+  if(!name) return;
+  const profiles = getProfiles();
+  if(profiles.find(p=>p.name.toLowerCase()===name.toLowerCase())) {
+    alert('Ya existe un perfil con ese nombre.'); return;
+  }
+  const avatar = AVATARS[profiles.length % AVATARS.length];
+  const profile = { name, avatar };
+  profiles.push(profile);
+  saveProfiles(profiles);
+  input.value = '';
+  selectProfile(profile);
+}
+function selectProfile(profile) {
+  currentProfile = profile;
+  document.getElementById('hero-name').textContent = profile.avatar + ' ' + profile.name;
+  hideProfileScreen();
+  loadWeek(currentMonday);
+}
+// ── End profile system ───────────────────────────────────
 
 function getMondayOf(date) {
   const d = new Date(date), day = d.getDay();
@@ -321,7 +407,10 @@ function formatWeekRange(m) {
   const mo=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
   return `${m.getDate()} al ${sun.getDate()} de ${mo[sun.getMonth()]}`;
 }
-function storageKey(m) { return 'habitos_week_'+weekKey(m); }
+function storageKey(m) {
+  const p = currentProfile ? '_'+currentProfile.name.toLowerCase().replace(/\s+/g,'_') : '';
+  return 'habitos_week'+p+'_'+weekKey(m);
+}
 
 function loadWeek(m) {
   const key = storageKey(m);
@@ -650,7 +739,15 @@ if(/iphone|ipad|ipod/i.test(navigator.userAgent) && !window.navigator.standalone
   document.getElementById('install-banner').style.display='block';
 }
 
-loadWeek(currentMonday);
+// Start: show profile screen
+const profiles = getProfiles();
+if(profiles.length === 0) {
+  showProfileScreen();
+} else if(profiles.length === 1) {
+  selectProfile(profiles[0]);
+} else {
+  showProfileScreen();
+}
 </script>
 </body>
 </html>
