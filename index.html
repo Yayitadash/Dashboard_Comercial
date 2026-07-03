@@ -451,6 +451,8 @@ function changeWeek(dir) {
   currentMonday = new Date(currentMonday);
   currentMonday.setDate(currentMonday.getDate()+dir*7);
   loadWeek(currentMonday);
+  const enGraficas = document.getElementById('tab-graficas').style.display !== 'none';
+  if(enGraficas) setTimeout(renderCharts, 50);
 }
 
 function toggleHabit(id, di) {
