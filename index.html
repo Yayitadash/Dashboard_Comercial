@@ -164,12 +164,15 @@
   <div style="font-size:48px;">🌸</div>
   <h2 id="ps-title">Mis Hábitos</h2>
   <div class="ps-tagline" id="ps-tagline">Cultivando hábitos para una vida saludable</div>
-  <p id="ps-who">¿Quién eres tú?</p>
   <div class="ps-lang" id="ps-lang-btns"></div>
+  <p id="ps-who">¿Quién eres tú?</p>
   <div class="profile-list" id="profile-list"></div>
-  <div class="profile-new">
-    <input type="text" id="profile-input" maxlength="20" onkeydown="if(event.key==='Enter')createProfile()">
-    <button id="ps-create-btn" onclick="createProfile()">+ Crear</button>
+  <div id="ps-create-section" style="width:100%;max-width:340px;">
+    <div id="ps-or-divider" style="display:none;text-align:center;color:rgba(255,255,255,0.5);font-size:12px;margin-bottom:12px;">─── o crear nuevo ───</div>
+    <div class="profile-new">
+      <input type="text" id="profile-input" maxlength="20" onkeydown="if(event.key==='Enter')createProfile()">
+      <button id="ps-create-btn" onclick="createProfile()">+ Crear</button>
+    </div>
   </div>
 </div>
 
@@ -667,11 +670,18 @@ function showProfileScreen() {
 function hideProfileScreen() { document.getElementById('profile-screen').style.display='none'; }
 function renderProfileList() {
   const list=document.getElementById('profile-list'); list.innerHTML='';
-  getProfiles().forEach(p=>{
-    const btn=document.createElement('button'); btn.className='profile-btn';
-    btn.innerHTML=`<div class="pb-avatar">${p.avatar}</div><span>${p.name}</span>`;
-    btn.onclick=()=>selectProfile(p); list.appendChild(btn);
-  });
+  const profiles=getProfiles();
+  const divider=document.getElementById('ps-or-divider');
+  if(profiles.length>0){
+    if(divider) divider.style.display='block';
+    profiles.forEach(p=>{
+      const btn=document.createElement('button'); btn.className='profile-btn';
+      btn.innerHTML=`<div class="pb-avatar">${p.avatar}</div><span>${p.name}</span>`;
+      btn.onclick=()=>selectProfile(p); list.appendChild(btn);
+    });
+  } else {
+    if(divider) divider.style.display='none';
+  }
 }
 function createProfile() {
   const input=document.getElementById('profile-input');
