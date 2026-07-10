@@ -47,11 +47,11 @@
   .week-title { font-size: 14px; font-weight: 500; color: var(--text); }
   .section-label { font-size: 11px; font-weight: 600; color: var(--pink); letter-spacing: 0.07em; text-transform: uppercase; padding: 14px 16px 6px; }
   .habits-block { background: var(--surface); margin: 0 12px 2px; border-radius: var(--radius); overflow: hidden; }
-  .habit-row { display: flex; align-items: center; padding: 10px 14px; border-bottom: 1px solid var(--border); gap: 8px; }
+  .habit-row { display: flex; align-items: center; padding: 10px 14px; border-bottom: 1px solid var(--border); gap: 8px; min-height: 50px; }
   .habit-row:last-child { border-bottom: none; }
-  .habit-name { font-size: 13px; color: var(--text); flex: 1; line-height: 1.3; }
-  .habit-emoji { font-size: 16px; width: 24px; flex-shrink: 0; }
-  .week-cells { display: flex; gap: 5px; flex-shrink: 0; }
+  .habit-name { font-size: 13px; color: var(--text); flex: 0 0 130px; width: 130px; line-height: 1.3; }
+  .habit-emoji { font-size: 16px; width: 24px; flex-shrink: 0; align-self: center; }
+  .week-cells { display: flex; gap: 5px; flex-shrink: 0; align-self: center; margin-left: auto; }
   .cell { width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid var(--border); background: var(--surface1); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--text3); transition: all 0.12s; user-select: none; flex-shrink: 0; }
   .cell.done { background: var(--green); border-color: var(--green); color: white; font-size: 12px; }
   .cell.fail { background: #f5eaee; border-color: #e0c0cc; color: #c08090; }
@@ -334,9 +334,9 @@ const T = {
     habits: {
       oracion: 'Oración matutina', dormir8: 'Dormí de 7 a 8 horas',
       sol: '10 min de Sol', desayuno: 'Desayuné', vitaminas: 'Vitaminas',
-      actfisica_m: 'Movimiento post desayuno', almuerzo: 'Almorcé',
-      actfisica_t: 'Movimiento post almuerzo', antojos: 'Controlé antojos',
-      cena: 'Cené', actfisica_n: 'Movimiento post cena',
+      actfisica_m: 'Mov. post desayuno', almuerzo: 'Almorcé',
+      actfisica_t: 'Mov. post almuerzo', antojos: 'Controlé antojos',
+      cena: 'Cené', actfisica_n: 'Mov. post cena',
       ultimacomida: 'Última comida antes 6pm',
       dormirtemprano: 'En cama antes de 10 pm', pantalla: 'Sin pantalla en cama',
     },
@@ -409,9 +409,9 @@ const T = {
     habits: {
       oracion: 'Morning prayer', dormir8: 'Slept 7–8 hours',
       sol: '10 min of sunlight', desayuno: 'Had breakfast', vitaminas: 'Vitamins',
-      actfisica_m: 'Post-breakfast movement', almuerzo: 'Had lunch',
-      actfisica_t: 'Post-lunch movement', antojos: 'Controlled cravings',
-      cena: 'Had dinner', actfisica_n: 'Post-dinner movement',
+      actfisica_m: 'Mov. post breakfast', almuerzo: 'Had lunch',
+      actfisica_t: 'Mov. post lunch', antojos: 'Controlled cravings',
+      cena: 'Had dinner', actfisica_n: 'Mov. post dinner',
       ultimacomida: 'Last meal before 6pm',
       dormirtemprano: 'In bed before 10 pm', pantalla: 'No screen in bed',
     },
@@ -484,9 +484,9 @@ const T = {
     habits: {
       oracion: 'Preghiera mattutina', dormir8: 'Ho dormito 7–8 ore',
       sol: '10 min di sole', desayuno: 'Ho fatto colazione', vitaminas: 'Vitamine',
-      actfisica_m: 'Movimento post colazione', almuerzo: 'Ho pranzato',
-      actfisica_t: 'Movimento post pranzo', antojos: 'Ho controllato i desideri',
-      cena: 'Ho cenato', actfisica_n: 'Movimento post cena',
+      actfisica_m: 'Mov. post colazione', almuerzo: 'Ho pranzato',
+      actfisica_t: 'Mov. post pranzo', antojos: 'Ho controllato i desideri',
+      cena: 'Ho cenato', actfisica_n: 'Mov. post cena',
       ultimacomida: 'Ultimo pasto prima delle 18',
       dormirtemprano: 'A letto prima delle 22', pantalla: 'Niente schermo a letto',
     },
